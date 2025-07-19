@@ -8,8 +8,8 @@ N="\e[0m"
 
 if [ $USERID -ne 0 ]
 then
-    echo: -e "$R ERROR:Please run the script with root access $N"
+    echo -e "$R ERROR:Please run the script with root access $N"
     exit 1
 else
-    echo: "Your running with root Access"
+    echo "Your running with root Access"
 fi
