@@ -5,11 +5,90 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+LOGS_FOLDER="/var/log/roboshop-logs"
+SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
+LOG_FILE=$LOGS_FOLDER/$SCRIPT_NAME .log
+
+mkdir -p $LOGS_FOLDER
+
+echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 if [ $USERID -ne 0 ]
 then
-    echo -e "$R ERROR:Please run the script with root access $N"
+    echo -e "$R ERROR:Please run the script with root access $N" | tee -a $LOG_FILE
     exit 1
 else
-    echo "Your running with root Access"
+    echo "Your running with root Access" | tee -a $LOG_FILE
 fi
+
+VALIDATE() {
+    if [ $1 -eq 0 ]
+    then
+        echo -e "Installing $2 is .... $G Success $N" | tee -a $LOG_FILE
+    else
+        echo -e "Installing $2 is ...$R failure $N" | tee -a $LOG_FILE
+        exit 1
+        fi
+}
+
+dnf module disable nodejs -y &>>LOG_FILE
+VALIDATE $? "Disabling NodeJs"
+
+dnf module enable nodejs:20 -y &>>LOG_FILE
+VALIDATE $? "Enabling NodeJs"
+
+dnf install nodejs -y &>>LOG_FILE
+VALIDATE $? "Install NodeJs"
+
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+VALIDATE $? "Creating app User"
+
+mkdir /app 
+VALIDATE $? "Creating App Directory"
+
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>LOG_FILE
+VALIDATE $? "Downloading Catalogue Content"
+
+cd /app 
+VALIDATE $? "Moving to App Directory"
+
+unzip /tmp/catalogue.zip &>>LOG_FILE
+VALIDATE $? "Unzip the Catalogue Content"
+
+npm install &>>LOG_FILE
+VALIDATE $? "Installing Dependencies"
+
+CP $SCRIPT_DIR/Catalogue.service /etc/systemd/system/catalogue.service 
+VALIDATE $? "Copying Catalogue Service"
+
+systemctl daemon-reload &>>LOG_FILE
+VALIDATE $? "Load the Service"
+
+systemctl enable catalogue 
+systemctl start catalogue &>>LOG_FILE
+VALIDATE $? "Starting Catalogue"
+
+CP $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
+VALIDATE $? "Copying mango.repo"
+
+dnf install mongodb-mongosh -y &>>LOG_FILE
+VALIDATE $? "Instaling Mongodb Client"
+
+mongosh --host mongodb.daws85s.cyou </app/db/master-data.js &>>LOG_FILE
+VALIDATE $? "Load Master Data"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
