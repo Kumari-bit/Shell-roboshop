@@ -11,5 +11,5 @@ then
     echo: -e "$R ERROR:Please run the script with root access $N"
     exit 1
 else
-    echo: -e "$G Your running with root Access $N"
+    echo: "Your running with root Access"
 fi
