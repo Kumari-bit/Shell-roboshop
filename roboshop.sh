@@ -7,7 +7,7 @@ ZONE_ID="Z089235936D5DMGV67BYD" # replace with your ZONE ID
 DOMAIN_NAME="daws85s.cyou" # replace with your domain
 
 #for instance in ${INSTANCES[@]}
-for instance in ${INSTANCES[@]}
+for instance in $@
 do
     INSTANCE_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t3.micro --security-group-ids sg-091d30e70a2b591df --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=$instance}]" --query "Instances[0].InstanceId" --output text)
     if [ $instance != "frontend" ]
@@ -19,7 +19,7 @@ do
         RECORD_NAME="$DOMAIN_NAME"
     fi
     echo "$instance IP address: $IP"
-    
+
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
     --change-batch '
