@@ -8,9 +8,9 @@ N="\e[0m"
 LOGS_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE=$LOGS_FOLDER/$SCRIPT_NAME .log
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
-
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 if [ $USERID -ne 0 ]
@@ -41,7 +41,7 @@ dnf install nodejs -y &>>LOG_FILE
 VALIDATE $? "Install NodeJs"
 
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-VALIDATE $? "Creating app User"
+VALIDATE $? "Adding app User"
 
 mkdir /app 
 VALIDATE $? "Creating App Directory"
