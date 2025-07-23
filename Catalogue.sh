@@ -41,7 +41,7 @@ dnf install nodejs -y &>>LOG_FILE
 VALIDATE $? "Install NodeJs"
 
 id roboshop
-if [ $? -eq 0 ]
+if [ $? -ne 0 ]
 then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
     VALIDATE $? "Adding app User"
