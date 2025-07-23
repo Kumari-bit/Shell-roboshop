@@ -7,7 +7,7 @@ Y="\e[33m"
 N="\e[0m"
 LOGS_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
-LOG_FILE=$LOGS_FOLDER/$SCRIPT_NAME .log
+LOG_FILE=$LOGS_FOLDER/$SCRIPT_NAME.log
 SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
@@ -58,7 +58,7 @@ VALIDATE $? "Unzip the Catalogue Content"
 npm install &>>LOG_FILE
 VALIDATE $? "Installing Dependencies"
 
-CP $SCRIPT_DIR/Catalogue.service /etc/systemd/system/catalogue.service 
+cp $SCRIPT_DIR/Catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Copying Catalogue Service"
 
 systemctl daemon-reload &>>LOG_FILE
