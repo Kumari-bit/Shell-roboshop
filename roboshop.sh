@@ -2,9 +2,10 @@
 
 AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-091d30e70a2b591df"
+INSTANCES=("mongodb" "mysql" "redis" "rabbitMQ" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
 ZONE_ID="Z089235936D5DMGV67BYD"
 DOMAIN_NAME="daws85s.cyou"
-INSTANCES=("mongodb" "mysql" "redis" "rabbitMQ" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
+
 
 for instance in ${INSTANCES[@]}
 do
@@ -21,9 +22,9 @@ do
     --hosted-zone-id $ZONE_ID \
     --change-batch '
     {
-        "Comment": "Creating a record set for cognito endpoint"
+        "Comment": "Creating or updating a record set for cognito endpoint"
         ,"Changes": [{
-         "Action"              : "CREATE"
+         "Action"              : "UPSERT"
         ,"ResourceRecordSet"  : {
          "Name"                 : "'$instance'.'$DOMAIN_NAME'"
          ,"Type"                : "A"  
