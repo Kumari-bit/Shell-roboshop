@@ -65,7 +65,7 @@ VALIDATE $? "unzipping catalogue"
 npm install &>>$LOG_FILE
 VALIDATE $? "Installing Dependencies"
 
-cp /home/ec2-user/Shell-roboshop/catalogue/catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Copying catalogue service"
 
 systemctl daemon-reload &>>$LOG_FILE
