@@ -71,7 +71,7 @@ VALIDATE $? "Copying cart service"
 
 systemctl daemon-reload &>>$LOG_FILE
 systemctl enable cart  &>>$LOG_FILE
-systemctl start cart
+systemctl restart cart
 VALIDATE $? "Starting cart"
 
 END_TIME=$(date +%s)
