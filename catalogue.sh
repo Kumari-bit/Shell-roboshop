@@ -76,7 +76,5 @@ VALIDATE $? "Starting Catalogue"
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB Client"
-
-    echo -e "Data is already loaded ... $Y SKIPPING $N"
+echo -e "Data is already loaded ... $Y SKIPPING $N"
 fi
-
